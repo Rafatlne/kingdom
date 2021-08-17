@@ -9,13 +9,13 @@ class Language(models.Model):
 
 class Neighbour(models.Model):
     name = models.CharField(max_length=200)
-    alpha3Code = models.CharField(max_length=10)
+    alpha3code = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name
 class Country(models.Model):
     name = models.CharField(max_length=200)
-    alpha2Code = models.CharField(max_length=10)
+    alpha2code = models.CharField(max_length=10)
     capital = models.CharField(max_length=200)
     population = models.CharField(max_length=200, blank=True)
     timezone = models.CharField(max_length=200, blank=True)
