@@ -18,3 +18,15 @@ class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
         fields = "__all__"
+
+class NeighbourIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(max_length=200)
+    alpha3code = serializers.CharField(max_length=10)
+
+    def validate_id(self, id):
+        try:
+            neighbour = Neighbour.objects.get(pk=id)
+        except Neighbour.DoesNotExist:
+            raise serializers.ValidationError('Neighbour does not exist')
+        return neighbour
