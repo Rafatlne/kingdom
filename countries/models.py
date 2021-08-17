@@ -5,9 +5,9 @@ class Country(models.Model):
     name = models.CharField(max_length=200)
     alpha2Code = models.CharField(max_length=10)
     capital = models.CharField(max_length=200)
-    population = models.CharField(max_length=200)
-    timezone = models.CharField(max_length=200)
-    flag = models.TextField(max_length=200)
+    population = models.CharField(max_length=200, blank=True)
+    timezone = models.CharField(max_length=200, blank=True)
+    flag = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
