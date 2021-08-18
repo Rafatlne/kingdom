@@ -12,8 +12,8 @@ class NeighbourSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class CountrySerializer(serializers.ModelSerializer):
-    languages = LanguageSerializer(read_only=True, many=True)
-    neighbours = NeighbourSerializer(read_only=True, many=True)
+    languages = LanguageSerializer(read_only=False, many=True, required=False)
+    neighbours = NeighbourSerializer(read_only=False, many=True, required=False)
 
     class Meta:
         model = Country
@@ -30,3 +30,9 @@ class NeighbourIdSerializer(serializers.Serializer):
         except Neighbour.DoesNotExist:
             raise serializers.ValidationError('Neighbour does not exist')
         return neighbour
+
+
+class CountryWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = "__all__"
