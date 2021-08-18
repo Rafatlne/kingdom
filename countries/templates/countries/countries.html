@@ -73,8 +73,9 @@
         <div class="row my-3">
             <section class="col-12">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search Country Name"
-                        aria-label="Search Country Name" aria-describedby="button-addon2">
+                    <input type="text" id="search-country" name="country" class="form-control"
+                        placeholder="Search Country Name" aria-label="Search Country Name"
+                        aria-describedby="button-addon2">
                     <button class="btn btn-outline-primary" type="button" id="search-button">Search</button>
                     <button class="btn btn-outline-warning ms-2" type="button" id="reset-button">Reset Table</button>
                 </div>
@@ -137,6 +138,8 @@
     });
 
     $(document).ready(function () {
+
+        // when details button clicked a modal will show
         $(document).on("click", "#details-button", function () {
             let dataId = $(this).attr('data-id');
 
@@ -158,7 +161,7 @@
                     neighbours = data.neighbours.map(function (elem) {
                         return elem.name;
                     }).join(", ");
-                    
+
                     $('#country-details-modal #languages').text(languages)
                     $('#country-details-modal #neighbours').text(neighbours)
                 }
@@ -166,8 +169,35 @@
                 $("#overlay").fadeOut(300);
             });
         });
+
+        // when search button clicked country table will be rehydrated 
+        $('#search-button').on('click', function (e) {
+            let searchCountry = $('#search-country').val()
+
+            if (searchCountry != "") {
+                $('#country-table tbody').empty()
+
+                $.ajax({
+                    url: '/api/v1/countries/?search=' + searchCountry,
+                    type: 'GET',
+                    success: function (data) {
+                        let tableHtml = makeHtml(data);
+                        $('#country-table tbody').html(tableHtml)
+                    }
+                }).done(function () {
+                    $("#overlay").fadeOut(300);
+                });
+            }
+        });
+
+        // reset the table
+        $('#reset-button').on('click', function (e) {
+            $('#country-table tbody').empty()
+            loadDateInTable();
+        });
     });
 
+    // load all the countries data in the table
     function loadDateInTable() {
         $(document).ajaxSend(function () {
             $("#overlay").fadeIn(300);
@@ -177,24 +207,31 @@
             url: '/api/v1/countries/',
             type: 'GET',
             success: function (data) {
-                let tableHtml = "";
-                $.each(data, function (key, value) {
-                    let name = '<tr><td scope="row">' + value.name + '</td>'
-                    let alpha2code = '<td>' + value.alpha2code + '</td>'
-                    let capital = '<td>' + value.capital + '</td>'
-                    let population = '<td>' + value.population + '</td>'
-                    let timezone = '<td>' + value.timezone + '</td>'
-                    let flag = '<td>' + value.flag + '</td>'
-                    let action = '<th><button class="btn btn-outline-info" type="button" id="details-button" data-id="' + value.id + '">Details</button></th></tr>'
-
-                    tableHtml = tableHtml + name + alpha2code + capital + population + timezone + flag + action
-                });
-
+                let tableHtml = makeHtml(data);
                 $('#country-table tbody').html(tableHtml)
             }
         }).done(function () {
             $("#overlay").fadeOut(300);
         });
+    }
+
+    // make html for country table
+    function makeHtml(data) {
+        let tableHtml = "";
+
+        $.each(data, function (key, value) {
+            let name = '<tr><td scope="row">' + value.name + '</td>'
+            let alpha2code = '<td>' + value.alpha2code + '</td>'
+            let capital = '<td>' + value.capital + '</td>'
+            let population = '<td>' + value.population + '</td>'
+            let timezone = '<td>' + value.timezone + '</td>'
+            let flag = '<td>' + value.flag + '</td>'
+            let action = '<th><button class="btn btn-outline-info" type="button" id="details-button" data-id="' + value.id + '">Details</button></th></tr>'
+
+            tableHtml = tableHtml + name + alpha2code + capital + population + timezone + flag + action
+        });
+
+        return tableHtml;
     }
 </script>
 
