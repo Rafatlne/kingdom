@@ -5,6 +5,7 @@ from .models import *
 from .serializers import *
 from rest_framework import viewsets
 from .filters import *
+from django.views import generic
 
 class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all().order_by('name')
@@ -24,3 +25,6 @@ class CountryViewSet(viewsets.ModelViewSet):
     def neighbours(self, request, pk=None):
         serializer = NeighbourIdSerializer(Country.objects.get(pk=pk).neighbours, many=True)
         return Response(serializer.data)
+
+class CountryView(generic.TemplateView):
+    template_name = 'countries/countries.html'
