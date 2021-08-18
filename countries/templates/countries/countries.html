@@ -100,19 +100,72 @@
         </table>
     </section>
 
+    <!-- Modal -->
+    <div class="modal fade" id="country-details-modal" tabindex="-1" aria-labelledby="country-details-modal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary bg-gradient">
+                    <h5 class="modal-title text-light">Country Language & Neighbours</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-primary text-uppercase">Official Languages</h6>
+                    <p id="languages"></p>
+                    <h6 class="text-primary text-uppercase">Neighbours</h6>
+                    <p id="neighbours"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
     integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous">
-</script>
+    </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
     integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous">
-</script>
+    </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script>
     jQuery(function ($) {
-
         loadDateInTable();
+    });
+
+    $(document).ready(function () {
+        $(document).on("click", "#details-button", function () {
+            let dataId = $(this).attr('data-id');
+
+            let countryModal = new bootstrap.Modal(document.getElementById('country-details-modal'), {
+                keyboard: false
+            })
+            countryModal.show()
+
+            $.ajax({
+                url: '/api/v1/countries/' + dataId + '/',
+                type: 'GET',
+                success: function (data) {
+                    let languages = "";
+                    languages = data.languages.map(function (elem) {
+                        return elem.name;
+                    }).join(", ");
+
+                    let neighbours = "";
+                    neighbours = data.neighbours.map(function (elem) {
+                        return elem.name;
+                    }).join(", ");
+                    
+                    $('#country-details-modal #languages').text(languages)
+                    $('#country-details-modal #neighbours').text(neighbours)
+                }
+            }).done(function () {
+                $("#overlay").fadeOut(300);
+            });
+        });
     });
 
     function loadDateInTable() {
@@ -125,17 +178,17 @@
             type: 'GET',
             success: function (data) {
                 let tableHtml = "";
-                $.each( data, function( key, value ) {
-                    let name = '<tr><td scope="row">'+ value.name + '</td>'
-                    let alpha2code = '<td>'+ value.alpha2code + '</td>'
-                    let capital = '<td>'+ value.capital + '</td>'
-                    let population = '<td>'+ value.population + '</td>'
-                    let timezone = '<td>'+ value.timezone + '</td>'
-                    let flag = '<td>'+ value.flag + '</td>'
-                    let action = '<th><button class="btn btn-outline-info" type="button" id="details-button">Details</button></th></tr>'
+                $.each(data, function (key, value) {
+                    let name = '<tr><td scope="row">' + value.name + '</td>'
+                    let alpha2code = '<td>' + value.alpha2code + '</td>'
+                    let capital = '<td>' + value.capital + '</td>'
+                    let population = '<td>' + value.population + '</td>'
+                    let timezone = '<td>' + value.timezone + '</td>'
+                    let flag = '<td>' + value.flag + '</td>'
+                    let action = '<th><button class="btn btn-outline-info" type="button" id="details-button" data-id="' + value.id + '">Details</button></th></tr>'
 
                     tableHtml = tableHtml + name + alpha2code + capital + population + timezone + flag + action
-                  });
+                });
 
                 $('#country-table tbody').html(tableHtml)
             }
