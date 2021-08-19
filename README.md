@@ -60,7 +60,7 @@ Content: {
             ]
         }
 ````
-> Here you can send `languages` as empty array. But you have to send atleast one value in `neighbours` array.
+> Here you can send `languages` as empty array. But you have to send atleast one value in `neighbours` array. Also `languages` and `neighbours` array's only accept primary key values.
 4. Update an existing country
 ```
 Path : /api/v1/countries/{pk}/
@@ -81,7 +81,7 @@ Content: {
             ]
         }
 ````
-> Here you can send `languages` as empty array. But you have to send atleast one value in `neighbours` array.
+> Here you can send `languages` as empty array. But you have to send atleast one value in `neighbours` array. Also `languages` and `neighbours` array's only accept primary key values.
 5. Delete an existing country
 ```
 Path : /api/v1/countries/{pk}/
@@ -89,7 +89,7 @@ Http Method: DELETE
 ````
 6. List of neighbouring countries of a specific country
 ```
-Path : /api/v1/countries/{pk}/neighbours
+Path : /api/v1/countries/{pk}/neighbours/
 Http Method: GET
 ````
 7. List of countries that speak the same language based on a specific language. `language` parameter is case sensitive.
