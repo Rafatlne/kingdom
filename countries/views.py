@@ -12,6 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
+from .forms import *
+
 
 
 class CountryViewSet(viewsets.ModelViewSet):
@@ -79,3 +81,30 @@ class LogoutView(View):
         logout(request)
         return redirect('login')
 
+
+class RegistrationView(View):
+    template_name = 'countries/registration/registration.html'
+    registration_form = UserRegistrationForm
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('countries')
+            
+        context = {
+            "form": self.registration_form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        registered_form = UserRegistrationForm(request.POST)
+
+        if registered_form.is_valid():
+            registered_form.save()
+            user = registered_form.cleaned_data.get('username')
+            messages.success(request, "Registration successful for " + user)
+            return redirect('login')
+
+        context = {
+            "form": registered_form
+        }
+        return render(request, self.template_name, context)
