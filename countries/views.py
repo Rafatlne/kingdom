@@ -15,7 +15,6 @@ from django.http import HttpResponse
 from .forms import *
 
 
-
 class CountryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -42,7 +41,6 @@ class CountryViewSet(viewsets.ModelViewSet):
 class CountryView(LoginRequiredMixin, generic.TemplateView):
     login_url = '/login/'
     template_name = 'countries/countries.html'
-
 
 
 class LoginView(View):
@@ -89,7 +87,7 @@ class RegistrationView(View):
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('countries')
-            
+
         context = {
             "form": self.registration_form
         }
