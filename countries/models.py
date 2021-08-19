@@ -7,12 +7,15 @@ class Language(models.Model):
     def __str__(self):
         return self.name
 
+
 class Neighbour(models.Model):
     name = models.CharField(max_length=200)
     alpha3code = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name
+
+
 class Country(models.Model):
     name = models.CharField(max_length=200)
     alpha2code = models.CharField(max_length=10)
@@ -21,8 +24,8 @@ class Country(models.Model):
     timezone = models.CharField(max_length=200, blank=True)
     flag = models.TextField(blank=True)
     languages = models.ManyToManyField(Language, related_name="countries")
-    neighbours = models.ManyToManyField(Neighbour, related_name="countries", blank=True)
+    neighbours = models.ManyToManyField(
+        Neighbour, related_name="countries", blank=True)
 
     def __str__(self):
         return self.name
-

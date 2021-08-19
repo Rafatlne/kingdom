@@ -8,16 +8,18 @@ class UserRegistrationForm(UserCreationForm):
 
     password1 = forms.CharField(
         label="Password",
-        widget=forms.PasswordInput(attrs={'class':'form-control', 'type':'password', 'placeholder':'Enter Password'}),
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'type': 'password', 'placeholder': 'Enter Password'}),
     )
     password2 = forms.CharField(
         label="Confirm password",
-        widget=forms.PasswordInput(attrs={'class':'form-control', 'type':'password', 'placeholder':'Re-enter Password'}),
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'type': 'password', 'placeholder': 'Re-enter Password'}),
     )
 
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2']
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Enter Username'}),
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Username'}),
         }
