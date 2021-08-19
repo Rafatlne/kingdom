@@ -6,12 +6,12 @@ Python 3.6+
 
 ## Installation
 - Install the dependency using 
-`pip install -r requirement.txt`
+`pip install -r requirements.txt`
 - Rename **.env.example** file that is situated in **kingdom/** folder to **.env**
 - Change `SECRET_KEY` , `DB_NAME` in the **.env** file.
 - Make Migrations `python manage.py migrate`
-- Run this command to insert data `python manage.py runscript insert_all_data`, **THIS COMMAND WILL TAKE MORE THAN 5MINS TO FINISH.**
-- After finishing the previous command, Create a Super Admin `python manage.py createsuperuser`
+- Run this command to insert data `python manage.py runscript insert_all_data`, **THIS COMMAND WILL TAKE MORE THAN 6MINS TO FINISH. DO NOT STOP THE COMMAND MIDDLE OF THE OPERATION**
+- If previous command was successful, Create a Super Admin `python manage.py createsuperuser`
 - Run the application `python manage.py runserver` . This will run the server at http://127.0.0.1:8000/.
 
 ## How to use
